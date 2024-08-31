@@ -85,6 +85,33 @@ stage("Create frontend docker image") {
                 sh "cd FrontEnd/my-app && docker build --no-cache -t Useradmin1112/amazon-clone-frontend   . "                
             }
         }
+        stage("Create frontend docker image") {
+            steps {
+                echo 'Creating frontend docker image ...'
+                sh "cd FrontEnd/my-app && docker build --no-cache -t Useradmin1112/amazon-clone-frontend   . "                
+            }
+        }stage("Create backend docker image") {
+            steps {
+                echo 'Creating backend docker image ...'
+                sh " cd BackEnd/Amazon-clone/ && docker build --no-cache -t Useradmin1112/amazon-clone-backend  . "
+            }
+        }
+         stage("docker frontend run") {
+             steps {
+                 echo " ============== Creating frontend docker container =================="
+                 sh '''
+                 docker run -d --restart=always -p 80:80 --name=frontend Useradmin1112/amazon-clone-frontend
+                 '''
+             }
+         }
+        stage("docker backend run") {
+             steps {
+                 echo " ============== Creating backend docker container =================="
+                 sh '''
+                 docker run -d --restart=always -p 5034:5034 --name=backend Useradmin1112/amazon-clone-backend
+                 '''
+             }
+        }
     }
 
 }
