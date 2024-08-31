@@ -1,65 +1,35 @@
 #!groovy
-
 //  groovy Jenkinsfile
-
 pipeline  {
-
     agent any;
-
     stages {
-
+        
          stage("Backup files")
-
          {
-
              steps{
-
                 sh """
-
                 #!/bin/bash
-
                 hostname
-
                 """
-
              }
-
          }
-
         stage("Change IP in appsettings.json")
-
          {
-
              steps{
-
                 sh "find BackEnd/Amazon-clone/ -type f -exec sed  -i 's#http://localhost:81#https://20.172.64.52/#g' {} +"
-
              }
-
          }
-
         stage("Change IP in axios.js")
-
          {
-
              steps{
-
                 sh "find FrontEnd/my-app/ -type f -exec sed  -i 's#http://localhost:5034#https://20.172.64.52/api#g' {} +"
-
              }
-
          }
-
        stage("Change Database IP in appsettings.json")
-
          {
-
              steps{
-
                 sh "find BackEnd/Amazon-clone/ -type f -exec sed  -i 's#Server=20.240.61.200#Server=20.172.64.52#g' {} +"
-
              }
-
          }
         stage ("Remove all containers and images"){
              steps{
@@ -78,19 +48,13 @@ pipeline  {
                 sh 'docker run  --restart=always -v /home/db:/var/opt/mssql -e "ACCEPT_EULA=Y" -e "MSSQL_SA_PASSWORD=Qwerty-1" -p 1433:1433 -d mcr.microsoft.com/mssql/server:2022-latest'
             }
         }
-        
-stage("Create frontend docker image") {
-            steps {
-                echo 'Creating frontend docker image ...'
-                sh "cd FrontEnd/my-app && docker build --no-cache -t Useradmin1112/amazon-clone-frontend   . "                
-            }
-        }
         stage("Create frontend docker image") {
             steps {
                 echo 'Creating frontend docker image ...'
                 sh "cd FrontEnd/my-app && docker build --no-cache -t Useradmin1112/amazon-clone-frontend   . "                
             }
-        }stage("Create backend docker image") {
+        }
+        stage("Create backend docker image") {
             steps {
                 echo 'Creating backend docker image ...'
                 sh " cd BackEnd/Amazon-clone/ && docker build --no-cache -t Useradmin1112/amazon-clone-backend  . "
@@ -113,6 +77,4 @@ stage("Create frontend docker image") {
              }
         }
     }
-
 }
- 
