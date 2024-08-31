@@ -22,7 +22,7 @@ pipeline  {
         stage("Change IP in axios.js")
          {
              steps{
-                sh "find FrontEnd/my-app/ -type f -exec sed  -i 's#http://localhost:5034#https://20.172.64.52/api#g' {} +"
+                sh "find FrontEnd/my-app/ -type f -exec sed  -i 's#http://localhost:5034#https://20.172.64.52:5034/api#g' {} +"
              }
          }
        stage("Change Database IP in appsettings.json")
